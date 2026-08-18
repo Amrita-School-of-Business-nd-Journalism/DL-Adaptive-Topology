@@ -1,5 +1,5 @@
 import torch
-import torchvision
+# import torchvision
 from model_training import Generator
 from torchvision.utils import save_image
 import os
@@ -20,12 +20,14 @@ generator.load_state_dict(save_path["generator_state_dict"])
 
 generator.eval()
 
-class_id = 1      
+# class_id = 1 
+class_id = int(input("Enter Class ID: "))
+No_of_images = int(input("No of images needed:"))     
 
 save_dir = f"cgan_vae_class_{class_id}"
 os.makedirs(save_dir, exist_ok=True)
 
-for i in range(20):
+for i in range(No_of_images):
 
     noise = torch.randn(1, 100, 1, 1).to(device)
     label = torch.tensor([class_id], dtype=torch.long).to(device)
@@ -33,6 +35,6 @@ for i in range(20):
     with torch.no_grad():
         syn = generator(noise, label)
 
-    torchvision.utils.save_image(syn, os.path.join(save_dir, f"class{class_id}_{i+1}.png"), normalize=True)
+    save_image(syn, os.path.join(save_dir, f"class{class_id}_{i+1}.png"), normalize=True)
 
 print("Images generated.")
